@@ -1,0 +1,810 @@
+Q.1 --> Stack
+ #include<stdio.h>
+int arr[10], top=-1;
+void push(){
+	int ele;
+	if(top == 10){
+		printf("Overflow");
+	}
+	else{
+	
+	printf("Enter a number: ");
+	scanf("%d", &ele);
+	top++;
+	arr[top]= ele;
+	}
+}
+
+void pop(){
+	if(top == -1){
+		printf("Underflow");
+	}
+	arr[top] = '\0';
+	top--;
+}
+void display(){
+	int i;
+	for(i=top; i>=0; i--){
+		printf("%d     ", arr[i]);
+	}
+}
+void main(){
+	int ch;
+
+	do{
+ printf("\n1.PUSH\n2.POP\n3.DISPLAY\n4.EXIT\n");
+ printf("\nEnter the choice : ");
+ scanf("%d",&ch);
+ switch(ch)
+		 {
+		 case 1:
+		 {
+		 push();
+		 break;
+		 }
+		 case 2:
+		 {
+		 pop();
+		 break;
+		 }
+		 case 3:
+		 {
+		 display();
+		 break;
+		 }
+		 case 4:
+		 {
+		 break;
+		 }
+		 default:
+		 {
+		 printf ("\nInvalid Choice\n");
+		 }}}
+		 while(ch!=4);
+		}
+
+Q.2 --> Quick Sort
+#include <stdio.h>
+
+void quicksort(int number[10],int first,int last){
+
+	int i, j, pivot, temp;
+
+	if(first<last){
+
+		pivot=first;
+
+		i=first;
+
+		j=last;
+
+		while(i<j){
+			while(number[i]<=number[pivot]&&i<last)
+				i++;
+        		while(number[j]>number[pivot])
+				j--;
+			if(i<j){
+				temp=number[i];
+				number[i]=number[j];
+				number[j]=temp;
+			}
+		}
+		temp=number[pivot];
+		number[pivot]=number[j];
+		number[j]=temp;
+		quicksort(number,first,j-1);
+		quicksort(number,j+1,last);
+	}
+}
+
+int main() {
+    FILE * fp = fopen("ex.txt", "r");
+//    if(!fp) {return -1;}
+    int array[20] = {0}; // you can use array[size] if you know exactly how many numbers in the file 
+    int i;
+for(i=0;i<20;i++)
+{
+fscanf(fp,"%d",&array[i]);
+}
+quicksort(array,0,20);
+
+printf("The Sorted Order is: ");
+
+for(i=0;i<20;i++)
+
+printf(" %d",array[i]);
+
+    // sort the array here as you did in your code
+    return 0;
+}
+
+
+
+
+Q.3--> marge short--
+#include<stdio.h>
+#include<time.h>
+void merge(int arr[], int l, int m, int r)
+{
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+ 
+    /* create temp arrays */
+    int L[n1], R[n2];
+ 
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+ 
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray
+    j = 0; // Initial index of second subarray
+    k = l; // Initial index of merged subarray
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+ 
+    /* Copy the remaining elements of L[], if there
+    are any */
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    /* Copy the remaining elements of R[], if there
+    are any */
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+ 
+/* l is for left index and r is right index of the
+sub-array of arr to be sorted */
+void mergeSort(int arr[], int l, int r)
+{
+    if (l < r) {
+        // Same as (l+r)/2, but avoids overflow for
+        // large l and h
+        int m = l + (r - l) / 2;
+ 
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+ 
+        merge(arr, l, m, r);
+    }
+}
+ 
+/* UTILITY FUNCTIONS */
+/* Function to print an array */
+void printArray(int A[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+        printf("%d ", A[i]);
+    printf("\n");
+}
+ 
+/* Driver code */
+int main()
+{
+	double S_time=0;
+	clock_t begin = clock();
+    FILE * fp = fopen("ex.txt", "r");
+			//    if(!fp) {return -1;}
+			    int arr[255] = {0};  // you can use array[size] if you know exactly how many numbers in the file 
+			    int i;
+			for(i=0;i<255;i++)
+			{
+			fscanf(fp,"%d",&arr[i]);
+			}
+	    
+	    int arr_size = 255;
+    printf("Given array is \n");
+    printArray(arr, arr_size);
+ 
+    mergeSort(arr, 0, arr_size - 1);
+ 
+    printf("\nSorted array is \n");
+    printArray(arr, arr_size);
+    clock_t end = clock();
+	S_time = S_time + (double)(end-begin) / (CLOCKS_PER_SEC);
+	printf("Running time is %f",S_time);
+    return 0;
+}
+
+
+Q.4 --> 0/1 knapsack
+
+#include<stdio.h>
+#include<conio.h>
+int w[10],p[10],v[10][10],n,i,j,cap,x[10]= {0};
+int max(int i,int j) {
+return ((i>j)?i:j);
+}
+int knap(int i,int j) {
+int value;
+if(v[i][j]<0) {
+if(j<w[i])
+value=knap(i-1,j); else
+value=max(knap(i-1,j),p[i]+knap(i-1,j-w[i]));
+v[i][j]=value;
+}
+return(v[i][j]);
+}
+void main() {
+int profit,count=0;
+printf("\nEnter the number of elements\n");
+scanf("%d",&n);
+printf("Enter the profit and weights of the elements\n");
+for (i=1;i<=n;i++) {
+printf("For item no %d\n",i);
+scanf("%d%d",&p[i],&w[i]);
+}
+printf("\nEnter the capacity \n");
+scanf("%d",&cap);
+for (i=0;i<=n;i++)
+for (j=0;j<=cap;j++)
+if((i==0)||(j==0))
+v[i][j]=0; else
+v[i][j]=-1;
+profit=knap(n,cap);
+i=n;
+j=cap;
+while(j!=0&&i!=0) {
+if(v[i][j]!=v[i-1][j]) {
+x[i]=1;
+j=j-w[i];
+i--;
+} else
+i--;
+}
+printf("Items included are\n");
+printf("Sl.no\tweight\tprofit\n");
+for (i=1;i<=n;i++)
+if(x[i])
+printf("%d\t%d\t%d\n",++count,w[i],p[i]);
+printf("Total profit = %d\n",profit);
+
+}
+
+
+
+
+Q.5 --> 8Queens
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+#include<stdlib.h>
+int a[30],count=0;
+int place(int pos) {
+int i;
+for (i=1;i<pos;i++) {
+if((a[i]==a[pos])||((abs(a[i]-a[pos])==abs(i-pos))))
+return 0;
+}
+return 1;
+}
+void print_sol(int n) {
+int i,j;
+count++;
+printf("\n\nSolution #%d:\n",count);
+for (i=1;i<=n;i++) {
+for (j=1;j<=n;j++) {
+if(a[i]==j)
+printf("Q\t"); else
+printf("*\t");
+}
+printf("\n");
+}
+}
+void queen(int n) {
+int k=1;
+a[k]=0;
+while(k!=0) {
+a[k]=a[k]+1;
+while((a[k]<=n)&&!place(k))
+a[k]++;
+if(a[k]<=n) {
+if(k==n)
+print_sol(n); else {
+k++;
+a[k]=0;
+}
+} else
+k--;
+}
+}
+void main() {
+int i,n;
+clrscr();
+printf("Enter the number of Queens\n");
+scanf("%d",&n);
+queen(n);
+printf("\nTotal solutions=%d",count);
+getch();
+}
+
+
+
+
+Q-6 --> MST using kruskal
+#include <stdio.h>
+//#include <conio.h>
+#include <stdlib.h>
+ 
+int i, j, k, a, b, u, v, n, ne = 1;
+int min, mincost = 0, cost[9][9], parent[9];
+ 
+int find(int);
+int uni(int, int);
+ 
+int  main()
+{
+  printf("Kruskal's algorithm in C\n");
+  printf("========================\n");
+ 
+  printf("Enter the no. of vertices:\n");
+  scanf("%d", &n);
+ 
+  printf("\nEnter the cost adjacency matrix:\n");
+  for (i = 1; i <= n; i++)
+  {
+    for (j = 1; j <= n; j++)
+    {
+      scanf("%d", &cost[i][j]);
+      if (cost[i][j] == 0)
+        cost[i][j] = 999;
+    }
+
+  }
+ 
+  printf("The edges of Minimum Cost Spanning Tree are\n");
+  while (ne < n)
+  {
+    for (i = 1, min = 999; i <= n; i++)
+    {
+      for (j = 1; j <= n; j++)
+      {
+        if (cost[i][j] < min)
+        {
+          min = cost[i][j];
+          a = u = i;
+          b = v = j;
+
+        }
+      }
+
+    }
+ 
+    u = find(u);
+    v = find(v);
+ 
+    if (uni(u, v))
+    {
+      printf("%d edge (%d,%d) =%d\n", ne++, a, b, min);
+      mincost += min;
+    }
+ 
+    cost[a][b] = cost[b][a] = 999;
+  }
+ 
+  printf("\nMinimum cost = %d\n", mincost);
+  return 0;
+}
+ 
+int find(int i)
+{
+//printf("%d parent",parent[i]);
+  while (parent[i])
+    i = parent[i];
+  return i;
+}
+ 
+int uni(int i, int j)
+{
+  if (i != j)
+  {
+    parent[j] = i;
+    return 1;
+  }
+ 
+  return 0;
+}
+
+
+
+
+
+
+Q.7  ---> MST using Prims:--
+
+#include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+#define INF 9999999
+#define v 3
+int g[v][v],i,j,no_edge,x,y;
+void main(){
+	printf("Enter the value of cost\n");
+	for(i=0;i<v;i++){
+		for(j=0;j<v;j++){
+			scanf("%d",&g[i][j]);
+		}
+	}
+	
+	int selected[v];
+	memset(selected,false,sizeof(selected));
+	
+	selected[0] = true;
+	no_edge = 0;
+	while(no_edge < v-1){
+		x=0;
+		y=0;
+		int min = INF;
+		for(i=0;i<v;i++){
+			if(selected[i]){
+				for(j=0;j<v;j++){
+					if(!selected[j] && g[i][j]){
+						if(min>g[i][j]){
+							min = g[i][j];
+							x=i;
+							y=j;
+						}
+					}
+				}
+			}
+		}
+		printf("\n%d - %d => %d\n",x,y,g[x][y]);
+	selected[y] = true;
+		no_edge++;
+	}
+	
+	
+}
+
+Q.8 --> Single Shortest path usin Dijkastra :--
+
+
+// C program for Dijkstra's single source shortest path
+// algorithm. The program is for adjacency matrix
+// representation of the graph
+  
+#include <limits.h>
+#include <stdbool.h>
+#include <stdio.h>
+  
+// Number of vertices in the graph
+#define V 9
+  
+// A utility function to find the vertex with minimum
+// distance value, from the set of vertices not yet included
+// in shortest path tree
+int minDistance(int dist[], bool sptSet[])
+{
+    // Initialize min value
+    int v;
+    int min = INT_MAX, min_index;
+  
+    for(v = 0; v < V; v++)
+        if (sptSet[v] == false && dist[v] <= min)
+            min = dist[v], min_index = v;
+  
+    return min_index;
+}
+  
+// A utility function to print the constructed distance
+// array
+void printSolution(int dist[])
+{
+	int i;
+    printf("Vertex \t\t Distance from Source\n");
+    for (i = 0; i < V; i++)
+        printf("%d \t\t\t\t %d\n", i, dist[i]);
+}
+  
+// Function that implements Dijkstra's single source
+// shortest path algorithm for a graph represented using
+// adjacency matrix representation
+void dijkstra(int graph[V][V], int src)
+{
+    int i,count,u,v,dist[V]; // The output array.  dist[i] will hold the
+                 // shortest
+    // distance from src to i
+  
+    bool sptSet[V]; // sptSet[i] will be true if vertex i is
+                    // included in shortest
+    // path tree or shortest distance from src to i is
+    // finalized
+  
+    // Initialize all distances as INFINITE and stpSet[] as
+    // false
+    for (i = 0; i < V; i++)
+        dist[i] = INT_MAX, sptSet[i] = false;
+  
+    // Distance of source vertex from itself is always 0
+    dist[src] = 0;
+  
+    // Find shortest path for all vertices
+    for (count = 0; count < V - 1; count++) {
+        // Pick the minimum distance vertex from the set of
+        // vertices not yet processed. u is always equal to
+        // src in the first iteration.
+        u = minDistance(dist, sptSet);
+  
+        // Mark the picked vertex as processed
+        sptSet[u] = true;
+  
+        // Update dist value of the adjacent vertices of the
+        // picked vertex.
+        for (v = 0; v < V; v++)
+  
+            // Update dist[v] only if is not in sptSet,
+            // there is an edge from u to v, and total
+            // weight of path from src to  v through u is
+            // smaller than current value of dist[v]
+            if (!sptSet[v] && graph[u][v]
+                && dist[u] != INT_MAX
+                && dist[u] + graph[u][v] < dist[v])
+                dist[v] = dist[u] + graph[u][v];
+    }
+  
+    // print the constructed distance array
+    printSolution(dist);
+}
+  
+// driver's code
+int main()
+{
+    /* Let us create the example graph discussed above */
+    int graph[V][V] = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+                        { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                        { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                        { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                        { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                        { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+                        { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+                        { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                        { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+  
+    // Function call
+    dijkstra(graph, 0);
+  
+    return 0;
+}
+
+
+
+
+Q.9 --> BFS :--
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define V 4
+
+void BFS(int);
+int i,j,G[V][V],Visited[V],source;
+
+int main(){
+	printf("Enter Adjesent :");
+	for(i=0;i<V;i++){
+		for(j=0;j<V;j++){
+			scanf("%d",&G[i][j]);
+		}
+	}
+	for(i=0;i<V;i++){
+		Visited[i]=0;
+	}
+	BFS(0);
+	return 0;
+}
+
+void BFS(int source){
+	
+	Visited[source]=1;
+	printf("%d ",source);
+	for(i=0;i<V;i++){
+		if(!Visited[i] && G[source][i]==1)
+		{
+			BFS(i);	 
+			
+		}	    
+	 }                               
+	}     
+	
+
+Q.10 --> floyd's Algorithm
+#include<stdio.h>
+void flyod(int a[4][4],int n){
+int i,j,k;
+for(k=0;k<n;k++){
+for(i=0;i<n;i++){
+for(j=0;j<n;j++){
+if(a[i][j]>a[i][k]+a[k][j]){
+a[i][j] = a[i][k]+a[k][j];
+}
+}
+}
+}
+printf("All pairs shortestpath is: \n");
+for(i=0;i<n;i++){
+for(j=0;j<n;j++){
+printf("%d",a[i][j]);
+}
+printf("\n");
+}
+}
+
+int main(){
+int n = 4; 
+int cost[4][4] = {{0,3,999,4},{8,0,2,999},{5,999,0,1},{2,999,999,0}};
+floyd(cost,n);
+return 0;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+#define MAX 100
+
+#define initial 1
+#define visited 2
+
+int n;    /* Number of nodes in the graph */
+int adj[MAX][MAX]; /*Adjacency Matrix*/
+int state[MAX]; /*Can be initial or visited */
+
+void DF_Traversal();
+void DFS(int v);
+void create_graph();
+
+int stack[MAX];
+int top = -1;
+void push(int v);
+int pop();
+int isEmpty_stack();
+
+main()
+{
+        create_graph();
+        DF_Traversal();
+}/*End of main()*/
+
+void DF_Traversal()
+{
+        int v;
+
+        for(v=0; v<n; v++)
+                state[v]=initial;
+
+        printf("\nEnter starting node for Depth First Search : ");
+        scanf("%d",&v);
+        DFS(v);
+        printf("\n");
+}/*End of DF_Traversal( )*/
+
+void DFS(int v)
+{
+        int i;
+        push(v);
+        while(!isEmpty_stack())
+        {
+                v = pop();
+                if(state[v]==initial)
+                {
+                        printf("%d ",v);
+                        state[v]=visited;
+                }
+                for(i=n-1; i>=0; i--)
+                {
+                        if(adj[v][i]==1 && state[i]==initial)
+                                push(i);
+                }
+        }
+}/*End of DFS( )*/
+
+void push(int v)
+{
+        if(top == (MAX-1))
+        {
+                printf("\nStack Overflow\n");
+                return;
+        }
+        top=top+1;
+        stack[top] = v;
+
+}/*End of push()*/
+
+int pop()
+{
+        int v;
+        if(top == -1)
+        {
+                printf("\nStack Underflow\n");
+                exit(1);
+        }
+        else
+        {
+                v = stack[top];
+                top=top-1;
+                return v;
+        }
+}/*End of pop()*/
+
+int isEmpty_stack( )
+{
+  if(top == -1)
+          return 1;
+  else
+          return 0;
+}/*End if isEmpty_stack()*/
+
+void create_graph()
+{
+        int i,max_edges,origin,destin;
+
+        printf("\nEnter number of nodes : ");
+        scanf("%d",&n);
+        max_edges=n*(n-1);
+
+        for(i=1;i<=max_edges;i++)
+        {
+                printf("\nEnter edge %d( -1 -1 to quit ) : ",i);
+                scanf("%d %d",&origin,&destin);
+
+                if( (origin == -1) && (destin == -1) )
+                        break;
+
+                if( origin >= n || destin >= n || origin<0 || destin<0)
+                {
+                        printf("\nInvalid edge!\n");
+                        i--;
+                }
+                else
+                {
+                        adj[origin][destin] = 1;
+                }
+        }
+}
